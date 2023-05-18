@@ -1,11 +1,24 @@
-const promises = [
-			new Promise(resolve => setTimeout(() => resolve(Math.random() * 5 + 1), Math.random() * 5000)),
-			new Promise(resolve => setTimeout(() => resolve(Math.random() * 5 + 1), Math.random() * 5000)),
-			new Promise(resolve => setTimeout(() => resolve(Math.random() * 5 + 1), Math.random() * 5000)),
-			new Promise(resolve => setTimeout(() => resolve(Math.random() * 5 + 1), Math.random() * 5000)),
-			new Promise(resolve => setTimeout(() => resolve(Math.random() * 5 + 1), Math.random() * 5000))
-		];
+function getRandomTime(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min) * 1000; // Convert to milliseconds
+}
 
-		Promise.any(promises).then(result => {
-			document.getElementById("output").innerText = result;
-		});
+const promises = [];
+for (let i = 0; i < 5; i++) {
+  const promise = new Promise((resolve) => {
+    const time = getRandomTime(1, 5);
+    setTimeout(() => {
+      resolve(`Promise ${i + 1} resolved after ${time / 1000} seconds`);
+    }, time);
+  });
+  promises.push(promise);
+}
+
+Promise.any(promises)
+  .then((result) => {
+    const outputDiv = document.getElementById("output");
+    outputDiv.textContent = result;
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+
